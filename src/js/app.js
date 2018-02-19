@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import Grid from 'react-virtual-css-grid';
+
+import '../styles/style.css';
+
+import doctosimage from '../assets/doctors.jpg'; // Importing image -> ADDED IN THIS STEP
 
 export default class Hello extends Component {
   render() {
-  	let style={height:'100vh'}
     return (
       <div>
-        <Grid style={style} nItems={1000000} renderGridItem={({absolutePosition})=>{
-        	return (<div key={absolutePosition}>{absolutePosition}</div>)
-        }}/>
+        Hello from react
 
+        {/* ADDED IN THIS STEP */}
+        <img src={ doctosimage } alt='Doctors Working' width='150px' />
       </div>
     );
   }
