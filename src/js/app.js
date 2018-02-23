@@ -9,7 +9,7 @@ export default class Hello extends Component {
   render() {
     return (
       <div>
-        CARLAO TRETA - DA - asdasdasds
+        CARLAO !!!aa!TRETA - DA - asdasdasds
 
         {/* ADDED IN THIS STEP */}
         <img src={ doctosimage } alt='Doctors Working' width='150px' />

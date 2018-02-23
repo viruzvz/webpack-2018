@@ -55,7 +55,7 @@ module.exports = {
             // use style-loader in development
             fallback: "style-loader"
         })
-      },    
+      },
       // CSS loader for CSS files
       // Files will get handled by css loader and then passed to the extract text plugin
       // which will write it to the file we defined above
@@ -84,5 +84,6 @@ module.exports = {
   // import MyComponent from './my-component.jsx';
   resolve: {
     extensions: ['.js', '.jsx'],
-  },
+  }
+
 };
