@@ -4,7 +4,11 @@ const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
+const extractSass = new ExtractTextPlugin({
+    filename: "[name].[contenthash].css",
+    disable: process.env.NODE_ENV === "development"
+});
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 // Constant with our paths
 const paths = {
   DIST: path.resolve(__dirname, 'dist'),
@@ -17,14 +21,16 @@ module.exports = {
   entry: path.join(paths.JS, 'app.js'),
   output: {
     path: paths.DIST,
-    filename: 'app.bundle.js',
+    filename: '[name].bundle.js',
   },
   // Tell webpack to use html plugin
   plugins: [
+    new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
       template: path.join(paths.SRC, 'index.html'),
     }),
     new ExtractTextPlugin('style.bundle.css'), // CSS will be extracted to this bundle file -> ADDED IN THIS STEP
+    extractSass
   ],
   // Loaders configuration
   // We are telling webpack to use "babel-loader" for .js and .jsx files
@@ -37,6 +43,19 @@ module.exports = {
           'babel-loader',
         ],
       },
+      // Chain the sass-loader with the css-loader and the style-loader to immediately apply all styles to the DOM.
+      {
+        test: /\.scss$/,
+        use: extractSass.extract({
+            use: [{
+                loader: "css-loader"
+            }, {
+                loader: "sass-loader"
+            }],
+            // use style-loader in development
+            fallback: "style-loader"
+        })
+      },    
       // CSS loader for CSS files
       // Files will get handled by css loader and then passed to the extract text plugin
       // which will write it to the file we defined above
