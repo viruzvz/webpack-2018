@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 
 import '../styles/style.scss';
+import '../styles/style.less';
 
 import doctosimage from '../assets/doctors.jpg'; // Importing image -> ADDED IN THIS STEP
 
 export default class Hello extends Component {
   render() {
     return (
-      <div>
-        CARLAO !!!aa!TRETA - DA - asdasdasds
+      <div class='superless'>
+        CARLAO !!!aa!TRETA - DA - aline , amo a mamae
 
         {/* ADDED IN THIS STEP */}
         <img src={ doctosimage } alt='Doctors Working' width='150px' />

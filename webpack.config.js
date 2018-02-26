@@ -8,6 +8,10 @@ const extractSass = new ExtractTextPlugin({
     filename: "[name].[contenthash].css",
     disable: process.env.NODE_ENV === "development"
 });
+const extractLess = new ExtractTextPlugin({
+    filename: "[name].[contenthash].css",
+    disable: process.env.NODE_ENV === "development"
+});
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 // Constant with our paths
 const paths = {
@@ -51,6 +55,19 @@ module.exports = {
                 loader: "css-loader"
             }, {
                 loader: "sass-loader"
+            }],
+            // use style-loader in development
+            fallback: "style-loader"
+        })
+      },
+      // Usually, it's recommended to extract the style sheets into a dedicated file in production using the ExtractTextPlugin. This way your styles are not dependent on JavaScript:
+      {
+      test: /\.less$/,
+        use: extractLess.extract({
+            use: [{
+                loader: "css-loader"
+            }, {
+                loader: "less-loader"
             }],
             // use style-loader in development
             fallback: "style-loader"
