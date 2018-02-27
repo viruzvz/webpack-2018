@@ -10,8 +10,7 @@ export default class Hello extends Component {
   render() {
     return (
       <div class='superless'>
-        CARLAO !!!aa!TRETA - DA - aline , amo a mamae
-
+        CARLAO !!!aa!TRETA - DA - 123456
         {/* ADDED IN THIS STEP */}
         <img src={ doctosimage } alt='Doctors Working' width='150px' />
       </div>

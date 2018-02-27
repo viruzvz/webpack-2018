@@ -1,18 +1,15 @@
-// We are using node's native package 'path'
-// https://nodejs.org/api/path.html
 const path = require('path');
-
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const extractSass = new ExtractTextPlugin({
-    filename: "[name].[contenthash].css",
-    disable: process.env.NODE_ENV === "development"
-});
-const extractLess = new ExtractTextPlugin({
-    filename: "[name].[contenthash].css",
-    disable: process.env.NODE_ENV === "development"
-});
+const precss = require('precss');
+const autoprefixer = require('autoprefixer');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+
+const extractCss = new ExtractTextPlugin({
+    filename: "[name].[contenthash].css",
+    disable: process.env.NODE_ENV === "development"
+});
+
 // Constant with our paths
 const paths = {
   DIST: path.resolve(__dirname, 'dist'),
@@ -25,16 +22,20 @@ module.exports = {
   entry: path.join(paths.JS, 'app.js'),
   output: {
     path: paths.DIST,
-    filename: '[name].bundle.js',
+    filename: '[name].[hash].bundle.js',
   },
-  // Tell webpack to use html plugin
+
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
+      title: 'My app',
+      filename: 'index.html',
       template: path.join(paths.SRC, 'index.html'),
+      hash:true,
     }),
-    new ExtractTextPlugin('style.bundle.css'), // CSS will be extracted to this bundle file -> ADDED IN THIS STEP
-    extractSass
+    new ExtractTextPlugin('[name].[hash].css'),
+    extractCss,
+
   ],
   // Loaders configuration
   // We are telling webpack to use "babel-loader" for .js and .jsx files
@@ -47,23 +48,35 @@ module.exports = {
           'babel-loader',
         ],
       },
-      // Chain the sass-loader with the css-loader and the style-loader to immediately apply all styles to the DOM.
       {
-        test: /\.scss$/,
-        use: extractSass.extract({
-            use: [{
-                loader: "css-loader"
-            }, {
-                loader: "sass-loader"
-            }],
+        test: /\.sass|scss$/,
+        use: extractCss.extract({
+            use: [
+              {
+                  loader: "css-loader"
+              }, 
+              {
+                  loader: "sass-loader"
+              },
+              {
+              loader: 'postcss-loader', // Run post css actions
+              options: {
+                plugins: function () { // post css plugins, can be exported to postcss.config.js
+                  return [
+                    precss,
+                    autoprefixer
+                  ];
+                }
+              }
+            },
+            ],
             // use style-loader in development
             fallback: "style-loader"
         })
       },
-      // Usually, it's recommended to extract the style sheets into a dedicated file in production using the ExtractTextPlugin. This way your styles are not dependent on JavaScript:
       {
       test: /\.less$/,
-        use: extractLess.extract({
+        use: extractCss.extract({
             use: [{
                 loader: "css-loader"
             }, {
@@ -73,17 +86,6 @@ module.exports = {
             fallback: "style-loader"
         })
       },
-      // CSS loader for CSS files
-      // Files will get handled by css loader and then passed to the extract text plugin
-      // which will write it to the file we defined above
-      {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract({
-          use: 'css-loader',
-        }),
-      },
-      // File loader for image assets -> ADDED IN THIS STEP
-      // We'll add only image extensions, but you can things like svgs, fonts and videos
       {
         test: /\.(png|jpg|gif)$/,
         use: [

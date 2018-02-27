@@ -10,10 +10,12 @@
   "author": "Carlos Neri",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^4.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   },
   "devDependencies": {
+    "autoprefixer": "^8.0.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
@@ -27,6 +29,8 @@
     "less": "^3.0.1",
     "less-loader": "^4.0.5",
     "node-sass": "^4.7.2",
+    "postcss-loader": "^2.1.1",
+    "precss": "^3.1.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.20.2",
     "webpack": "^3.10.0",
